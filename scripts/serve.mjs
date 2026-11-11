@@ -1,4 +1,4 @@
-import { createServer } from 'node:http';
+import { handleAiRequest } from '../lib/ai-handler.mjs';\nimport { createServer } from 'node:http';
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { extname } from 'node:path';
