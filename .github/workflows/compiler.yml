@@ -16,6 +16,7 @@ jobs:
           node-version: '22'
       - run: npm install --no-save playwright@1.51.1
       - run: npm run check
+      - run: node scripts/check-ai.mjs
       - run: npm run build
       - run: npx playwright install --with-deps chromium
       - run: node scripts/check-compiler.mjs
