@@ -1,7 +1,8 @@
-import { handleAiRequest } from '../lib/ai-handler.mjs';\nimport { createServer } from 'node:http';
+import { createServer } from 'node:http';
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { extname } from 'node:path';
+import { handleAiRequest } from '../lib/ai-handler.mjs';
 
 const root = new URL('../public/', import.meta.url);
 const types = {
@@ -20,10 +21,14 @@ try {
 }
 
 createServer(async (request, response) => {
+  if (new URL(request.url, 'http://localhost').pathname === '/api/chat') {
+    await handleAiRequest(request, response);
+    return;
+  }
   try {
     const path = decodeURIComponent(request.url.split('?')[0]);
     const parts = path.split('/').slice(1);
-    if (parts.some(part => part === '..' || part.includes('\\') || part.includes(':'))) {
+    if (parts.some(part => part === '..' || part.includes('\\\\') || part.includes(':'))) {
       response.writeHead(404).end();
       return;
     }
