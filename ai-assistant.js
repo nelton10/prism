@@ -27,8 +27,13 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
   } catch {}
 
   const saveProviders = () => {
-    try { localStorage.setItem(storageKey, JSON.stringify(providers)); }
-    catch { $('ai-config-status').textContent = 'Não foi possível salvar. Verifique o espaço disponível no navegador.'; }
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(providers));
+      return true;
+    } catch {
+      configStatus('Não foi possível salvar. Verifique o espaço disponível no navegador.');
+      return false;
+    }
   };
   const activeProvider = () => providers.find(p => p.id === selectedId);
   const configStatus = message => { $('ai-config-status').textContent = message; };
@@ -110,7 +115,7 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
     article.className = 'ai-message ai-message-' + role;
     const label = document.createElement('span');
     label.className = 'ai-message-label';
-    label.textContent = role === 'user' ? 'Você' : 'Assistente';
+    label.textContent = role === 'user' ? 'Você' : role === 'error' ? 'Erro' : 'Assistente';
     const body = document.createElement('div');
     body.className = 'ai-message-body';
     const codeMatches = [...content.matchAll(/```(?:latex|tex)?\s*([\s\S]*?)```/gi)];
@@ -169,6 +174,7 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
     });
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || 'Falha ao consultar o provedor.');
+    if (typeof data.reply !== 'string' || !data.reply.trim()) throw new Error('O provedor não retornou uma resposta de texto válida.');
     return data.reply;
   }
 
@@ -235,7 +241,7 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
     if (index >= 0) providers[index] = provider;
     else providers.push(provider);
     selectedId = provider.id;
-    saveProviders();
+    if (!saveProviders()) return;
     renderProviderSelect();
     $('ai-active-provider').value = selectedId;
     editConfig(provider);
@@ -245,7 +251,7 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
     if (!editingId || !confirm('Excluir esta conexão deste navegador?')) return;
     providers = providers.filter(p => p.id !== editingId);
     if (selectedId === editingId) selectedId = providers[0]?.id || '';
-    saveProviders();
+    if (!saveProviders()) return;
     renderProviderSelect();
     clearConfig();
   });
