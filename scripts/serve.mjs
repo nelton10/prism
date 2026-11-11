@@ -28,7 +28,7 @@ createServer(async (request, response) => {
   try {
     const path = decodeURIComponent(request.url.split('?')[0]);
     const parts = path.split('/').slice(1);
-    if (parts.some(part => part === '..' || part.includes('\\\\') || part.includes(':'))) {
+    if (parts.some(part => part === '..' || part.includes('\\') || part.includes(':'))) {
       response.writeHead(404).end();
       return;
     }
