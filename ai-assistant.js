@@ -113,7 +113,7 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
     label.textContent = role === 'user' ? 'Você' : 'Assistente';
     const body = document.createElement('div');
     body.className = 'ai-message-body';
-    const codeMatches = [...content.matchAll(/```(?:latex|tex)?\\s*([\\s\\S]*?)```/gi)];
+    const codeMatches = [...content.matchAll(/```(?:latex|tex)?\s*([\s\S]*?)```/gi)];
     if (!codeMatches.length) {
       body.textContent = content;
     } else {
@@ -136,7 +136,7 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
           insert.className = 'ai-insert';
           insert.textContent = 'Inserir no editor';
           insert.addEventListener('click', () => {
-            insertAtCursor(match[1].trim() + '\\n');
+            insertAtCursor(match[1].trim() + '\n');
             insert.textContent = 'Inserido no editor';
             insert.disabled = true;
           });
@@ -293,7 +293,7 @@ export function initAiAssistant({ getContext, getCompileLog, insertAtCursor }) {
   $('ai-error-context').addEventListener('click', () => {
     const log = getCompileLog();
     if (!log) return configStatus('Ainda não há log de compilação. Compile o documento primeiro.');
-    send('Analise este log de compilação LaTeX, identifique a causa provável e sugira a correção.\\n\\n' + log.slice(0, 12_000));
+    send('Analise este log de compilação LaTeX, identifique a causa provável e sugira a correção.\n\n' + log.slice(0, 12_000));
   });
 
   renderProviderSelect();
