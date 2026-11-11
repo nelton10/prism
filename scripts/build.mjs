@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { promisify } from 'node:util';
 
 const root = new URL('../', import.meta.url);
-const output = new URL('site-build/', root);
+const output = new URL('public/', root);
 const texlyre = new URL('vendor/texlyre/', output);
 const busytex = new URL('vendor/busytex/', output);
 const portuguese = new URL('vendor/babel-portuges/', output);
