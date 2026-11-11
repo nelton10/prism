@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ambiente de escrita LaTeX com c�digo, arquivos e pr�via lado a lado.">
+  <title>Ateli� TeX</title>
+  <link rel="stylesheet" href="style.css">
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <header class="top">
+    <div class="brand"><span class="mark" aria-hidden="true">?</span> Ateli� TeX</div>
+    <span class="project-divider"></span>
+    <button id="rename" class="project-name" title="Renomear projeto">Meu primeiro documento</button>
+    <div class="top-right"><span id="saved" role="status">Salvo neste navegador</span><button id="export" class="outline"> Exportar projeto</button></div>
+  </header>
+  <nav class="mobile" aria-label="Pain�is">
+    <button data-panel="files" aria-pressed="false">Arquivos</button>
+    <button data-panel="editor" aria-pressed="true">Editor</button>
+    <button data-panel="preview" aria-pressed="false">Pr�via</button>
+  </nav>
+  <main data-view="editor">
+    <aside class="files">
+      <div class="pane-bar"><strong>Arquivos</strong><div class="tools"><button id="add" title="Novo arquivo" aria-label="Novo arquivo">+</button><button id="import" title="Importar arquivos" aria-label="Importar arquivos"></button><input id="uploads" type="file" accept=".tex,.bib,.sty,.cls,.txt,.csv" multiple hidden></div></div>
+      <div id="file-list" aria-label="Arquivos do projeto"></div>
+      <div class="outline-panel"><h2>Estrutura</h2><div id="sections"></div></div>
+    </aside>
+    <section class="editor" aria-label="Editor LaTeX">
+      <div class="pane-bar editor-bar"><span id="tab"></span><div class="tools"><button id="file-rename" title="Renomear arquivo" aria-label="Renomear arquivo">?</button><button id="remove" title="Excluir arquivo" aria-label="Excluir arquivo">-</button></div></div>
+      <div class="code">
+        <div id="gutter" aria-hidden="true"></div>
+        <div class="code-input"><pre id="highlight" aria-hidden="true"></pre><textarea id="source" aria-label="C�digo LaTeX" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off"></textarea></div>
+      </div>
+      <footer><span>LaTeX � UTF-8</span><span id="cursor">Ln 1, Col 1</span></footer>
+    </section>
+    <section class="preview" aria-label="Pr�via do documento">
+      <div class="pane-bar preview-bar">
+        <button id="compile" class="primary">? Compilar PDF</button>
+        <select id="engine" aria-label="Motor de compila�ao"><option>pdflatex</option><option>xelatex</option><option>lualatex</option></select>
+        <div class="tools"><button id="draft" title="Mostrar rascunho">Rascunho</button><button id="external" title="Abrir compila�ao em outra aba" aria-label="Abrir compila�ao em outra aba">?</button></div>
+      </div>
+      <div id="paper-area"><article id="paper" aria-label="Rascunho do documento"></article></div>
+      <iframe name="compiled" id="pdf" title="Resultado da compila�ao LaTeX" hidden></iframe>
+      <footer><span id="preview-status" role="status">Rascunho visual</span><span>PDF � TeX Live</span></footer>
+    </section>
+  </main>
+  <dialog id="consent">
+    <form method="dialog">
+      <h2>Compilar com TeXLive.net</h2>
+      <p>Para gerar o PDF, os arquivos deste projeto serao enviados ao servi�o externo TeXLive.net. Voc� poder� baixar o PDF pelo visualizador.</p>
+      <div class="dialog-actions"><button value="cancel" class="outline">Cancelar</button><button value="compile" class="primary">Enviar e compilar</button></div>
+    </form>
+  </dialog>
+</body>
+</html>
+
