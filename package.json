@@ -6,7 +6,7 @@
   "scripts": {
     "build": "texlyre-busytex download-assets .tex-assets && node scripts/build.mjs",
     "start": "node scripts/serve.mjs",
-    "check": "node --check app.js && node --check ai-assistant.js && node --check compiler.js && node --check lib/ai-handler.mjs && node --check api/chat.js && node --check scripts/build.mjs && node --check scripts/serve.mjs"
+    "check": "node --check app.js && node --check ai-assistant.js && node --check compiler.js && node --check lib/ai-handler.mjs && node --check api/chat.js && node --check scripts/build.mjs && node --check scripts/serve.mjs && node --check scripts/check-ai.mjs"
   },
   "dependencies": {
     "texlyre-busytex": "1.4.1"
