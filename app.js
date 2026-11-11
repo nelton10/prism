@@ -29,7 +29,7 @@ const starter = [
 ].join('\n');
 const example = { name: 'Meu primeiro documento', active: 'main.tex', engine: 'pdflatex', files: { 'main.tex': starter } };
 const validPath = path => typeof path === 'string' && path.length <= 160 &&
-  /^(?:[a-z0-9_-]+\/)*[a-z0-9][a-z0-9_.-]*\.(?:tex|bib|sty|cls|txt|csv)$/i.test(path);
+  /^(?:[a-z0-9_-]+\/)*[a-z0-9][a-z0-9_.-]*\.(?:tex|bib|sty|cls|ldf|txt|csv)$/i.test(path);
 
 function validProject(project) {
   return project && typeof project.name === 'string' && project.files &&

@@ -1,6 +1,22 @@
 const assets = new URL('./vendor/busytex/', import.meta.url).href.replace(/\/$/, '');
 let loaded;
 let reportProgress;
+let portugueseFiles;
+
+function loadPortuguese() {
+  if (!portugueseFiles) {
+    const paths = ['brazil.ldf', 'brazilian.ldf', 'portuges.ldf', 'portuguese.ldf'];
+    portugueseFiles = Promise.all(paths.map(async path => {
+      const response = await fetch(new URL('./vendor/babel-portuges/' + path, import.meta.url));
+      if (!response.ok) throw new Error('Não foi possível carregar o suporte a português: ' + path);
+      return { path, content: new Uint8Array(await response.arrayBuffer()) };
+    })).catch(error => {
+      portugueseFiles = undefined;
+      throw error;
+    });
+  }
+  return portugueseFiles;
+}
 
 function loadCompiler() {
   if (!loaded) {
@@ -41,6 +57,11 @@ export async function compileLatex(files, engine, onStatus) {
       .filter(([path]) => /\.(tex|cls|sty)$/i.test(path))
       .map(([, content]) => content)
       .join('\n');
+    if (/\b(?:brazil|brazilian|portuguese|portuges)\b/i.test(texSources)) {
+      for (const file of await loadPortuguese()) {
+        if (!Object.hasOwn(files, file.path)) additionalFiles.push(file);
+      }
+    }
     const usesBiber = /\\addbibresource\s*(?:\[[^\]]*\])?\s*\{/.test(texSources);
     try {
       return await new Engine(runner).compile({
