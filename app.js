@@ -435,3 +435,20 @@ $('download-pdf').onclick = () => {
   link.click();
 };
 setProject();
+
+import('./ai-assistant.js').then(({ initAiAssistant }) => {
+  initAiAssistant({
+    getContext: () => {
+      const files = Object.entries(project.files).slice(0, 8).map(([name, content]) =>
+        '\n--- ' + name + ' ---\n' + content.slice(0, 9000)).join('');
+      return 'Projeto: ' + project.name + '\nArquivo ativo: ' + project.active +
+        '\nMotor: ' + project.engine + files;
+    },
+    getCompileLog: () => logText,
+    insertAtCursor: text => {
+      source.focus();
+      source.setRangeText(text, source.selectionStart, source.selectionEnd, 'end');
+      edit();
+    }
+  });
+}).catch(error => console.error('Falha ao iniciar o assistente de IA:', error));

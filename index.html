@@ -6,6 +6,7 @@
   <meta name="description" content="Ambiente de escrita LaTeX com código, arquivos e prévia lado a lado.">
   <title>Ateliê TeX</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="ai.css">
   <script type="module" src="app.js"></script>
 </head>
 <body>
@@ -13,7 +14,7 @@
     <div class="brand"><span class="mark" aria-hidden="true">◈</span> Ateliê TeX</div>
     <span class="project-divider"></span>
     <button id="rename" class="project-name" title="Renomear projeto">Meu primeiro documento</button>
-    <div class="top-right"><span id="saved" role="status">Salvo neste navegador</span><button id="export" class="outline">↓ Exportar projeto</button></div>
+    <div class="top-right"><button id="ai-open" class="ai-open-button" aria-controls="ai-panel" aria-expanded="false">✳ Assistente IA</button><span id="saved" role="status">Salvo neste navegador</span><button id="export" class="outline">↓ Exportar projeto</button></div>
   </header>
   <nav class="mobile" aria-label="Painéis">
     <button data-panel="files" aria-pressed="false">Arquivos</button>
@@ -49,6 +50,42 @@
       <footer><span id="preview-status" role="status">Rascunho visual</span><span>TeX Live · local</span></footer>
     </section>
   </main>
+  <aside id="ai-panel" class="ai-panel" aria-label="Assistente de IA" aria-hidden="true">
+  <div class="ai-heading">
+    <div><span class="ai-kicker">ATELIÊ TE X</span><h2>Assistente de IA</h2><p>Converse com diferentes modelos de inteligência artificial.</p></div>
+    <button id="ai-close" class="ai-icon-button" aria-label="Fechar assistente">×</button>
+  </div>
+  <div class="ai-toolbar">
+    <label for="ai-active-provider">Modelo ativo</label>
+    <div class="ai-provider-row"><select id="ai-active-provider" aria-label="Provedor e modelo"><option value="">Configure uma IA</option></select><button id="ai-settings-toggle" class="ai-icon-button" title="Configurar provedores" aria-label="Configurar provedores">⚙</button></div>
+  </div>
+  <section id="ai-settings" class="ai-settings" hidden>
+    <div class="ai-settings-title"><strong>Conexões de IA</strong><button id="ai-new-provider" type="button">＋ Nova conexão</button></div>
+    <label for="ai-preset">Tipo de provedor</label>
+    <select id="ai-preset">
+      <option value="openai">OpenAI</option><option value="gemini">Google Gemini</option><option value="deepseek">DeepSeek</option>
+      <option value="openrouter">OpenRouter</option><option value="groq">Groq</option><option value="mistral">Mistral</option>
+      <option value="anthropic">Anthropic Claude</option><option value="bedrock">Amazon Bedrock</option><option value="custom">Outro serviço compatível</option>
+    </select>
+    <label for="ai-name">Nome da conexão</label><input id="ai-name" placeholder="Ex.: Gemini pessoal">
+    <label for="ai-model">ID do modelo</label><input id="ai-model" placeholder="Informe o ID exato do modelo" autocomplete="off">
+    <label for="ai-base-url">URL base da API</label><input id="ai-base-url" placeholder="https://api.exemplo.com/v1" autocomplete="url">
+    <label for="ai-region">Região AWS (Bedrock)</label><input id="ai-region" placeholder="us-east-1">
+    <label for="ai-key">Chave de API / token</label><input id="ai-key" type="password" placeholder="Cole sua chave de API" autocomplete="off">
+    <p class="ai-security-note">A chave fica salva somente neste navegador e é enviada ao servidor por HTTPS quando você conversa. Não use em computadores compartilhados. O Ateliê TeX não recebe nem armazena sua chave em banco de dados.</p>
+    <div class="ai-settings-actions"><button id="ai-test" type="button">Testar conexão</button><button id="ai-delete" type="button" class="ai-danger" hidden>Excluir</button><button id="ai-save" type="button" class="ai-save">Salvar conexão</button></div>
+    <p id="ai-config-status" role="status" aria-live="polite"></p>
+  </section>
+  <div class="ai-context"><span>Contexto: <strong id="ai-context-file">documento atual</strong></span><button id="ai-error-context" type="button">Analisar último erro</button></div>
+  <div id="ai-messages" class="ai-messages" aria-live="polite">
+    <div class="ai-welcome"><span class="ai-spark">✳</span><strong>Olá! Vamos trabalhar no seu documento?</strong><p>Peça para escrever uma seção, explicar uma equação, revisar o texto ou investigar um erro de compilação.</p></div>
+  </div>
+  <form id="ai-form" class="ai-composer">
+    <textarea id="ai-prompt" rows="3" placeholder="Pergunte algo sobre LaTeX, matemática ou seu documento…" required></textarea>
+    <div class="ai-composer-bottom"><span>Enter para enviar · Shift + Enter para quebrar linha</span><button id="ai-send" class="ai-send" type="submit">Enviar ↑</button></div>
+  </form>
+</aside>
+<div id="ai-backdrop" class="ai-backdrop" hidden></div>
   <dialog id="compile-log">
     <form method="dialog">
       <h2>Log de compilação</h2>
